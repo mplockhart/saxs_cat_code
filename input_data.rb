@@ -141,35 +141,54 @@ def bins_5
   end
 end
 
-# input data file
-#scatter_file = File.open('file.file', 'w+')
+def shannon_values
+  #
+end
+
+<<comments
+input data file
+scatter_file = File.open('file.file', 'w+')
+comments
 
 # input Dmax from real space
 ################
-dmax = 'value' #
+dmax = 100     #
 ################
 
 # input Rg from real space
 ################
-rg = 'value'   #
+rg = 20        #
 ################
 
-# here you need to specify how many Shannon channel you require.
-# the number is 3, 4, or 5. 5 should be fine enough sampling in order to achieve a chi^2 close to 1
+<<comment
+here you need to specify how many Shannon channel you require.
+the number is 3, 4, or 5. 5 should be fine enough sampling in order to achieve a chi^2 close to 1
+comment
 
 ####################
-number_of_bins = 5 #
+shannon_bins = 5 #
 ####################
+
+<<shannon
+SAXS cat calculating the overall values for the bins for making the CNS files
+shannon
+
+channel_width = dmax / shannon_bins
+index = 0
+bin_center_array = []
+until index == (shannon_bins-1)
+  bin_centers = (channel_width * 0.5) + (shannon_bins * index)
+  bin_center_array.push(bin_centers)
+  index += 1
+end
+
 
 # here the name of the files need to be put between the parenthesis
-if number_of_bins == 3
+if shannon_bins == 3
   bins_3()
-
-elsif number_of_bins == 4
+elsif shannon_bins == 4
   bins_4()
-
-elsif number_of_bins == 5
+elsif shannon_bins == 5
   bins_5()
-
 end
 
