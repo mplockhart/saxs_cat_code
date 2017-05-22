@@ -1,0 +1,48 @@
+{* FRET distance information *}
+
+noe
+   nres=5000
+   class inter
+   ceiling=1000
+   averaging inter cent
+   potential inter square
+   sqconstant inter 1.
+   sqexponent inter 2
+   scale inter 150.
+
+ { remarks: rigid body modeling }
+ 
+ { assign <selection> <selection> distance dminus dplus }
+        
+  { FRET pairs near Ro }
+          assign ( resid 100 and segid A and name CA )
+                 ( resid 100 and segid B and name CA ) 300 4.9 4.9
+          	
+
+ end           
+ 
+ flags include NOE end 
+{* FRET distance information *}
+
+noe
+   nres=5000
+   class inter
+   ceiling=1000
+   averaging inter cent
+   potential inter square
+   sqconstant inter 1.
+   sqexponent inter 2
+   scale inter 150.
+
+ { remarks: rigid body modeling }
+ 
+ { assign <selection> <selection> distance dminus dplus }
+        
+  { FRET pairs near Ro }
+          assign ( resid 100 and segid A and name CA )
+                 ( resid 100 and segid B and name CA ) 300 4.9 4.9
+          	
+
+ end           
+ 
+ flags include NOE end 

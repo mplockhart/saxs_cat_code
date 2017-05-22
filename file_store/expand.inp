@@ -121,7 +121,7 @@
 
 {* atom selections for non-default rigid groups during torsion angle dynamics *}
 {* note: the selections must be non-overlapping *}
-{===>} atom_rigid_1=(none);
+{===>} atom_rigid_1=();
 
 ! to add more groups add more numbered entries:
 !   {===>} atom_rigid_11=(none);
@@ -157,7 +157,7 @@
 
 {* starting temperature *}
 {* used for both constant-temperature and slowcooling schemes *}
-{===>} temperature=10000;
+{===>} temperature=5000;
 
 {* temperature control method *}
 {* either coupling to a temperature bath or velocity scaling *}
@@ -166,7 +166,7 @@
 
 {* number of molecular dynamics steps *}
 {* only used for constant-temperature annealing schedule *}
-{===>} constant_steps=10000;
+{===>} constant_steps=5000;
 
 {* drop in temperature (K) per cycle of dynamics *}
 {* only used for slowcooling annealing schedule *}
@@ -190,7 +190,7 @@
 {* frequency of writing trajectory (in steps) *}
 {* this only applies to the constant temperature option *}
 {* a trajectory will not be written if this value is 0 or less *}
-{===>} traj_freq=0;
+{===>} traj_freq=1000;
 
 {* seed for random number generator *}
 {* change to get different initial velocities *}

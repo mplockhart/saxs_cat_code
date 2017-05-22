@@ -27,9 +27,9 @@ def cns_generate_file
   # Open and fill out the generate.inp file
   system('cp file_store/generate_easy.inp .')
   generate_file = File.read("generate_easy.inp")
-  sub_pdb_input = generate_file.gsub!(/{===>} coordinate_infile="input_rename_here.pdb";/, "{===>} coordinate_infile=\"#{@pdb_base_name}_atoms.pdb;")
-  @sub_pdb_output = generate_file.gsub!(/{===>} structure_outfile="output_generate_easy.mtf";/, "{===>} structure_outfile=\"#{@pdb_base_name}_output.mtf;")
-  @sub_mtf_output = generate_file.gsub!(/{===>} coordinate_outfile="output_generate_easy.pdb";/, "{===>} coordinate_outfile=\"#{@pdb_base_name}_output.pdb;")
+  sub_pdb_input = generate_file.gsub!(/{===>} coordinate_infile="input_rename_here.pdb";/, "{===>} coordinate_infile=\"#{@pdb_base_name}_atoms.pdb\";")
+  @sub_pdb_output = generate_file.gsub!(/{===>} structure_outfile="output_generate_easy.mtf";/, "{===>} structure_outfile=\"#{@pdb_base_name}_output.mtf\";")
+  @sub_mtf_output = generate_file.gsub!(/{===>} coordinate_outfile="output_generate_easy.pdb";/, "{===>} coordinate_outfile=\"#{@pdb_base_name}_output.pdb\";")
   generate_easy = File.open("generate_easy.inp", 'w')
   generate_easy.puts sub_pdb_input
   generate_easy.puts @sub_pdb_output
@@ -44,10 +44,10 @@ def cns_expand_file
   # Open and fill out the expand.inp file
   system('cp file_store/expand.inp .')
   expand_file = File.read("expand.inp")
-  sub_pdb_input = expand_file.gsub!(/{===>} coordinate_infile="amy_hydrogen.pdb";/, "{===>} coordinate_infile=\"#{@pdb_base_name}_output.pdb;")
-  sub_mtf_input = expand_file.gsub!(/{===>} structure_infile="";/, "{===>} structure_infile=\"#{@pdb_base_name}_output.mtf;")
+  sub_pdb_input = expand_file.gsub!(/{===>} coordinate_infile="amy_hydrogen.pdb";/, "{===>} coordinate_infile=\"#{@pdb_base_name}_output.pdb\";")
+  sub_mtf_input = expand_file.gsub!(/{===>} structure_infile="";/, "{===>} structure_infile=\"#{@pdb_base_name}_output.mtf\";")
   sub_restraint = expand_file.gsub!(/{===>} restraints_infile="";/, " {===>} restraints_infile=\"expand.def\"; ")
-  sub_trajectory_output = expand_file.gsub!(/{===>} output_root="model_anneal";/, "{===>} output_root=\"#{@pdb_base_name}_model_expand.pdb;")
+  sub_trajectory_output = expand_file.gsub!(/{===>} output_root="model_anneal";/, "{===>} output_root=\"#{@pdb_base_name}_model_expand.pdb\";")
   random = rand(10000..99999)
   sub_random_number = expand_file.gsub!(/{===>} seed=82364;/, "{===>} seed=#{random};")
   @expand = File.open('expand.inp', 'w')
@@ -58,15 +58,14 @@ def cns_expand_file
 
   system('cp file_store/expand.def .')
   expand_def = File.read("expand.def")
-##################################################################
-  sub_def_chain_1 = expand_def.gsub!(/resid chain_1/, 'resid 100')
-  sub_def_chain_2 = expand_def.gsub!(/resid chain_2/, 'resid 100')
+####################################################################
+  sub_def_chain_1 = expand_def.gsub!(/resid chain_1/, 'resid 100') # this may require changing if there are not
+  sub_def_chain_2 = expand_def.gsub!(/resid chain_2/, 'resid 100') # any residues with a resid of 100
 ##################################################################
   @expand_def = File.open('expand.def', 'w')
   @expand_def.puts sub_def_chain_1
   @expand_def.puts sub_def_chain_2
 end
-
 
 def cns_run_expand
   system('cns < expand.inp > expand.log')
@@ -220,11 +219,11 @@ cns_parameters
 extract_atoms
 cns_generate_file
 cns_run_generate
-#cns_expand_file
+cns_expand_file
 # need to assign th rigid bodies in the style:
 # {===>} atom_rigid_1=(segid A and resid 140:262);
 # etc
-#cns_run_expand
+cns_run_expand
 
 <<comments
 input data file

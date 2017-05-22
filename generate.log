@@ -1,0 +1,581 @@
+          ============================================================
+          |                                                          |
+          |            Crystallography & NMR System (CNS)            |
+          |                         CNSsolve                         |
+          |                                                          |
+          ============================================================
+           Version: 1.3
+           Status: General release
+          ============================================================
+           Written by: A.T.Brunger, P.D.Adams, G.M.Clore, W.L.DeLano,
+                       P.Gros, R.W.Grosse-Kunstleve,J.-S.Jiang,J.M.Krahn,
+                       J.Kuszewski, M.Nilges, N.S.Pannu, R.J.Read,
+                       L.M.Rice, G.F.Schroeder, T.Simonson, G.L.Warren.
+           Copyright (c) 1997-2010 Yale University
+          ============================================================
+           Running on machine: Mikes-Laptop-5.local (Mac/Intel,64-bit)
+                               with  2 threads
+           Program started by: michaellockh
+           Program started at: 18:06:47 on 22-May-2017
+          ============================================================
+
+ FFT3C: Using FFTPACK4.1
+
+ CNSsolve>{+ file: generate_easy.inp +} 
+ CNSsolve>{+ directory: general +} 
+ CNSsolve>{+ description: Generate a molecular topology file and/or generate coordinates for unknown atoms +} 
+ CNSsolve>{+ comment: 
+ CNSsolve>           The purpose of this file is two-fold.  (1) to generate positions 
+ CNSsolve>           of a few unknown atoms, and (2) to generate molecular topology file. 
+ CNSsolve>           The molecular topology file may be used in subsequent CNS input 
+ CNSsolve>           files, but this is usually not necessary if the automatic 
+ CNSsolve>           topology file generation option is available. 
+ CNSsolve> 
+ CNSsolve>           Notes: 
+ CNSsolve>           1. Each distinct protein, DNA, or RNA chain must have a separate segid 
+ CNSsolve>              (or chainid if the chainid is non-blank and the "convert" 
+ CNSsolve>              option is set to true). 
+ CNSsolve>           2. Each contiguous protein, RNA, or RNA chain must not be disrupted by 
+ CNSsolve>              other types of residues or ligands.  Rather, these other residues 
+ CNSsolve>              should be listed after protein, RNA/DNA chains. 
+ CNSsolve>           3. disulphides are automatically detected based on distances between the sulfur atoms 
+ CNSsolve>              (must be less than 3 A apart). 
+ CNSsolve>           4. broken polypeptide or nucleotide chains without terminii must be more than 2.5 A apart to be recognized as such. 
+ CNSsolve>           5. N-linked glycan links are automatically recognized if the bonded atoms are less than 2.5 A apart. 
+ CNSsolve>           7. PDB atom naming: O for NDG/A2G 
+ CNSsolve>           8. Automatic generation cannot be used with alternate conformations. 
+ CNSsolve>           9. For ligands, the user must make suitable topology and parameter files. 
+ CNSsolve>           10. For non-standard covalent linkages, the custom patch file should be used. 
+ CNSsolve> 
+ CNSsolve>           If any of these conditions is not met, change the default parameters below or 
+ CNSsolve>           use the generate.inp task file. 
+ CNSsolve> 
+ CNSsolve>           If specified this script generates hydrogens and atoms with unknown 
+ CNSsolve>           coordinates +} 
+ CNSsolve>{+ authors: Paul Adams and Axel Brunger +} 
+ CNSsolve>{+ copyright: Yale University +} 
+ CNSsolve> 
+ CNSsolve>{- Guidelines for using this file: 
+ CNSsolve>   - all strings must be quoted by double-quotes 
+ CNSsolve>   - logical variables (true/false) are not quoted 
+ CNSsolve>   - do not remove any evaluate statements from the file -} 
+ CNSsolve> 
+ CNSsolve>{- Special patches will have to be entered manually at the relevant points 
+ CNSsolve>   in the file - see comments throughout the file -} 
+ CNSsolve> 
+ CNSsolve>{- begin block parameter definition -} define( 
+ DEFINE> 
+ DEFINE>{============================== important =================================} 
+ DEFINE> 
+ DEFINE>{* Different chains in the structure must have either unique segid or 
+ DEFINE>   chainid records.  *} 
+ DEFINE> 
+ DEFINE>{* NB. The input PDB file must finish with an END statement!!! *} 
+ DEFINE> 
+ DEFINE>{=========================== coordinate file ==============================} 
+ DEFINE> 
+ DEFINE>{* coordinate file *} 
+ DEFINE>{===>} coordinate_infile="5h4s_atoms.pdb"; 
+ DEFINE> 
+ DEFINE>{* convert chainid to segid if chainid is non-blank *} 
+ DEFINE>{+ choice: true false +} 
+ DEFINE>{===>} convert=true; 
+ DEFINE> 
+ DEFINE>{* separate chains by segid - a new segid starts a new chain *} 
+ DEFINE>{+ choice: true false +} 
+ DEFINE>{===>} separate=true; 
+ DEFINE> 
+ DEFINE>{============ protein topology, linkage, and parameter files =============} 
+ DEFINE> 
+ DEFINE>{* topology files *} 
+ DEFINE>{===>} topology_infile_1="CNS_TOPPAR:protein-allhdg5-4.top"; 
+ DEFINE>{===>} topology_infile_2="CNS_TOPPAR:dna-rna-allatom-hj-opls.top"; 
+ DEFINE>{===>} topology_infile_3="CNS_TOPPAR:water.top"; 
+ DEFINE>{===>} topology_infile_4="CNS_TOPPAR:ion.top"; 
+ DEFINE>{===>} topology_infile_5="CNS_TOPPAR:carbohydrate.top"; 
+ DEFINE>{===>} topology_infile_6=""; 
+ DEFINE>{===>} topology_infile_7=""; 
+ DEFINE>{===>} topology_infile_8=""; 
+ DEFINE> 
+ DEFINE>{* linkage files for linear, continuous polymers (protein, DNA, RNA) *} 
+ DEFINE>{===>} link_infile_1="CNS_TOPPAR:protein-allhdg5-4.link"; 
+ DEFINE>{===>} link_infile_2="CNS_TOPPAR:dna-rna-pho.link"; 
+ DEFINE>{===>} link_infile_3=""; 
+ DEFINE> 
+ DEFINE>{* parameter files *} 
+ DEFINE>{===>} parameter_infile_1="CNS_TOPPAR:protein-allhdg5-4.param"; 
+ DEFINE>{===>} parameter_infile_2="CNS_TOPPAR:dna-rna-allatom-hj-opls.param"; 
+ DEFINE>{===>} parameter_infile_3="CNS_TOPPAR:water-allhdg5-4.param"; 
+ DEFINE>{===>} parameter_infile_4="CNS_TOPPAR:ion.param"; 
+ DEFINE>{===>} parameter_infile_5="CNS_TOPPAR:carbohydrate.param"; 
+ DEFINE>{===>} parameter_infile_6=""; 
+ DEFINE>{===>} parameter_infile_7=""; 
+ DEFINE>{===>} parameter_infile_8=""; 
+ DEFINE> 
+ DEFINE>{====================== other linkages and modifications  ==================} 
+ DEFINE> 
+ DEFINE>{* extra linkages and modifications by custom patches *} 
+ DEFINE>{===>} patch_infile=""; 
+ DEFINE> 
+ DEFINE>{============================ renaming atoms ===============================} 
+ DEFINE> 
+ DEFINE>{* some atoms may need to be renamed in the topology database to conform 
+ DEFINE>   to what is present in the coordinate file *} 
+ DEFINE> 
+ DEFINE>{* CNS uses O5 for NDG and A2G carbohydrates. PDB users O. 
+ DEFINE>   What is it currently called in the coordinate file? *} 
+ DEFINE>{* this will not be changed if left blank *} 
+ DEFINE>{===>} O5_becomes="O"; 
+ DEFINE> 
+ DEFINE>{======================= automatic mainchain breaks ========================} 
+ DEFINE> 
+ DEFINE>{* automatically detect mainchain breaks in proteins/DNA/RNA based on distance. *} 
+ DEFINE>{* Specify the cutoff distance in Angstroms for identification of breaks. 
+ DEFINE>   The default of 2.5 A should be reasonable for most cases. If the input 
+ DEFINE>   structure has bad geometry it may be necessary to increase this 
+ DEFINE>   distance. To turn off, set to zero. *} 
+ DEFINE>{===>} break_cutoff=2.5; 
+ DEFINE> 
+ DEFINE>{======================= automatic disulphide bonds ========================} 
+ DEFINE> 
+ DEFINE>{* cutoff distance in Angstroms for identification of disulphides *} 
+ DEFINE>{* The default of 3.0 A should be reasonable for most cases. If the input 
+ DEFINE>   structure has bad geometry it may be necessary to increase this distance. 
+ DEFINE>   To turn off set to zero. *} 
+ DEFINE>{* Note: the atom positions for the sulfurs have to be known. *} 
+ DEFINE>{===>} disulphide_dist=3.0; 
+ DEFINE> 
+ DEFINE>{======================= automatic N-linked glycans ========================} 
+ DEFINE> 
+ DEFINE>{* cutoff distance in Angstroms for identification of linkages in N-linked glycans *} 
+ DEFINE>{* The default of 2.5 A should be reasonable for most cases. To turn off set to zero. *} 
+ DEFINE>{* Note: the atom positions for the bonded atoms have to be known. *} 
+ DEFINE>{===>} carbo_dist=2.5; 
+ DEFINE> 
+ DEFINE>{========================= generate parameters =============================} 
+ DEFINE> 
+ DEFINE>{* hydrogen flag - determines whether hydrogens will be output *} 
+ DEFINE>{* must be true for NMR, atomic resolution X-ray crystallography 
+ DEFINE>   or modelling.  Set to false for X-ray crystallographic 
+ DEFINE>   applications in the initial stages of refinement. *} 
+ DEFINE>{+ choice: true false +} 
+ DEFINE>{===>} hydrogen_flag=true; 
+ DEFINE> 
+ DEFINE>{* selection of atoms to be deleted *} 
+ DEFINE>{* to delete no atoms use: (none) *} 
+ DEFINE>{===>} atom_delete=(none); 
+ DEFINE> 
+ DEFINE>{* selection of atoms for which coordinates will be (re-)generated *} 
+ DEFINE>{* to generate coordinates for all unknown atoms use: (not known) 
+ DEFINE>   and set the "selection of atoms to be deleted" to (none). *} 
+ DEFINE>{===>} atom_build=(not known); 
+ DEFINE> 
+ DEFINE>{* set bfactor flag *} 
+ DEFINE>{+ choice: true false +} 
+ DEFINE>{===>} set_bfactor=false; 
+ DEFINE> 
+ DEFINE>{* set bfactor value *} 
+ DEFINE>{===>} bfactor=15.0; 
+ DEFINE> 
+ DEFINE>{* set occupancy flag *} 
+ DEFINE>{+ choice: true false +} 
+ DEFINE>{===>} set_occupancy=false; 
+ DEFINE> 
+ DEFINE>{* set occupancy value *} 
+ DEFINE>{===>} occupancy=1.0; 
+ DEFINE> 
+ DEFINE>{============================= output files ================================} 
+ DEFINE> 
+ DEFINE>{* output structure file *} 
+ DEFINE>{===>} structure_outfile="5h4s_output.mtf"; 
+ DEFINE> 
+ DEFINE>{* output coordinate file *} 
+ DEFINE>{===>} coordinate_outfile="5h4s_output.pdb"; 
+ DEFINE> 
+ DEFINE>{===========================================================================} 
+ DEFINE>{         things below this line do not need to be changed                  } 
+ DEFINE>{===========================================================================} 
+ DEFINE> 
+ DEFINE> ) {- end block parameter definition -} 
+ CNSsolve> 
+ CNSsolve> checkversion 1.3 
+ Program version= 1.3 File version= 1.3
+ CNSsolve> 
+ CNSsolve> evaluate ($log_level=quiet) 
+ Assuming literal string "QUIET"
+ EVALUATE: symbol $LOG_LEVEL set to "QUIET" (string)
+ CNSsolve> 
+ CNSsolve> set message=off echo=off end 
+
+ automatically generating molecular topology
+
+ ASSFIL: file 5h4s_atoms.pdb opened.
+ SEGMNT-info: chain termination due to TER keyword.   284 residues were inserted into segid "A   "
+ disulphide added: from A    6    to A    36  
+ disulphide added: from A    15   to A    91  
+ disulphide added: from A    46   to A    78  
+ disulphide added: from A    59   to A    65  
+ disulphide added: from A    97   to A    123 
+ disulphide added: from A    103  to A    136 
+ disulphide added: from A    112  to A    191 
+ disulphide added: from A    146  to A    178 
+ disulphide added: from A    159  to A    165 
+ disulphide added: from A    198  to A    229 
+ disulphide added: from A    207  to A    283 
+ disulphide added: from A    238  to A    270 
+ disulphide added: from A    251  to A    257 
+
+ %PARRDR-info: duplication of bond HC   NC2 
+ %PARRDR-info: duplication of bond OUF  SUF 
+ %PARRDR-info: duplication of angle CH2P CH2E HA  
+ %PARRDR-info: duplication of angle OUF  SUF  OUF 
+ %PARRDR-info: duplication of nonbonded entry H   
+ %PARRDR-info: duplication of nonbonded entry HA  
+ %PARRDR-info: duplication of nonbonded entry HC  
+ %PARRDR-info: duplication of nonbonded entry SUF 
+ %PARRDR-info: duplication of nonbonded entry OUF 
+ %PARRDR-info: duplication of bond HC   NC2 
+ %PARRDR-info: duplication of bond OUF  SUF 
+ %PARRDR-info: duplication of angle CH2P CH2E HA  
+ %PARRDR-info: duplication of angle OUF  SUF  OUF 
+ %PARRDR-info: duplication of nonbonded entry H   
+ %PARRDR-info: duplication of nonbonded entry HA  
+ %PARRDR-info: duplication of nonbonded entry HC  
+ %PARRDR-info: duplication of nonbonded entry SUF 
+ %PARRDR-info: duplication of nonbonded entry OUF 
+ LBFGS: number of degrees of freedom=  5946
+ NBONDS: generating intra-molecular exclusion list with mode=-2
+ MAKINB: mode  -2 found   1982 exclusions and      0 interactions(1-4)
+ %atoms "A   -30  -ARG -HB2 " and "A   -30  -ARG -HD1 " only  0.07 A apart
+ %atoms "A   -33  -PRO -HB1 " and "A   -33  -PRO -HG1 " only  0.07 A apart
+ %atoms "A   -35  -ILE -HD11" and "A   -35  -ILE -HD13" only  0.07 A apart
+ %atoms "A   -73  -VAL -HG12" and "A   -73  -VAL -HG23" only  0.08 A apart
+ %atoms "A   -93  -ARG -HH11" and "A   -93  -ARG -HH22" only  0.10 A apart
+ %atoms "A   -99  -ARG -HN  " and "A   -99  -ARG -HH12" only  0.09 A apart
+ %atoms "A   -99  -ARG -HG1 " and "A   -99  -ARG -HH12" only  0.02 A apart
+ %atoms "A   -102 -ASP -HA  " and "A   -102 -ASP -HB1 " only  0.09 A apart
+ %atoms "A   -108 -ILE -HG11" and "A   -108 -ILE -HG23" only  0.09 A apart
+ %atoms "A   -113 -PRO -HG1 " and "A   -113 -PRO -HD2 " only  0.09 A apart
+ %atoms "A   -130 -GLN -HB2 " and "A   -130 -GLN -HG2 " only  0.05 A apart
+ %atoms "A   -132 -SER -HA  " and "A   -132 -SER -HB1 " only  0.07 A apart
+ %atoms "A   -138 -SER -HN  " and "A   -138 -SER -HB1 " only  0.03 A apart
+ %atoms "A   -150 -SER -CB  " and "A   -150 -SER -HG  " only  0.07 A apart
+ %atoms "A   -191 -CYS -CA  " and "A   -191 -CYS -HB2 " only  0.10 A apart
+ %atoms "A   -194 -ARG -HB1 " and "A   -194 -ARG -HH12" only  0.08 A apart
+ %atoms "A   -203 -LEU -HB2 " and "A   -203 -LEU -HD21" only  0.09 A apart
+ %atoms "A   -203 -LEU -HD13" and "A   -203 -LEU -HD21" only  0.07 A apart
+ %atoms "A   -205 -LEU -HD11" and "A   -205 -LEU -HD13" only  0.08 A apart
+ %atoms "A   -231 -GLY -HN  " and "A   -231 -GLY -HA1 " only  0.02 A apart
+ %atoms "A   -239 -ARG -HG1 " and "A   -239 -ARG -HD1 " only  0.05 A apart
+ %atoms "A   -246 -ILE -HN  " and "A   -246 -ILE -HD11" only  0.07 A apart
+ %atoms "A   -247 -VAL -HG12" and "A   -247 -VAL -HG21" only  0.10 A apart
+ %atoms "A   -254 -ARG -HA  " and "A   -254 -ARG -HG1 " only  0.08 A apart
+ %atoms "A   -263 -ASN -HB2 " and "A   -263 -ASN -HD21" only  0.08 A apart
+ %atoms "A   -266 -PHE -HB2 " and "A   -266 -PHE -HD1 " only  0.10 A apart
+ %atoms "A   -275 -LYS -HA  " and "A   -275 -LYS -HG2 " only  0.04 A apart
+ NBONDS: found   276384 intra-atom interactions
+ NBONDS: found       27 nonbonded violations
+ %atoms "A   -89  -TYR -HN  " and "A   -89  -TYR -HH  " only  0.05 A apart
+ %atoms "A   -98  -GLN -HB1 " and "A   -98  -GLN -HG1 " only  0.07 A apart
+ %atoms "A   -121 -HIS -HD1 " and "A   -121 -HIS -HE1 " only  0.05 A apart
+ %atoms "A   -219 -PHE -HB2 " and "A   -219 -PHE -CG  " only  0.05 A apart
+ %atoms "A   -263 -ASN -HB1 " and "A   -263 -ASN -HD21" only  0.09 A apart
+ %atoms "A   -265 -VAL -HG13" and "A   -265 -VAL -HG22" only  0.08 A apart
+ NBONDS: found   275623 intra-atom interactions
+ NBONDS: found        6 nonbonded violations
+ %atoms "A   -21  -ILE -HA  " and "A   -21  -ILE -CG1 " only  0.09 A apart
+ NBONDS: found   270300 intra-atom interactions
+ NBONDS: found        1 nonbonded violations
+ NBONDS: found   266952 intra-atom interactions
+ NBONDS: found   265612 intra-atom interactions
+ NBONDS: found   266409 intra-atom interactions
+ NBONDS: found   266648 intra-atom interactions
+ NBONDS: found   265782 intra-atom interactions
+ NBONDS: found   265722 intra-atom interactions
+ ------------------------------ cycle=    10 -----------------------------------
+ | Etotal =398467.299 grad(E)=291.225    E(BOND)=68060.125  E(ANGL)=166331.678 |
+ | E(VDW )=164075.495                                                          |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265663 intra-atom interactions
+ NBONDS: found   265586 intra-atom interactions
+ NBONDS: found   265698 intra-atom interactions
+ NBONDS: found   265607 intra-atom interactions
+ ------------------------------ cycle=    20 -----------------------------------
+ | Etotal =326242.658 grad(E)=250.196    E(BOND)=60268.115  E(ANGL)=128494.933 |
+ | E(VDW )=137479.610                                                          |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265618 intra-atom interactions
+ NBONDS: found   265624 intra-atom interactions
+ NBONDS: found   265651 intra-atom interactions
+ ------------------------------ cycle=    30 -----------------------------------
+ | Etotal =317229.723 grad(E)=247.287    E(BOND)=60705.864  E(ANGL)=124680.453 |
+ | E(VDW )=131843.405                                                          |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265714 intra-atom interactions
+ NBONDS: found   265643 intra-atom interactions
+ ------------------------------ cycle=    40 -----------------------------------
+ | Etotal =315125.354 grad(E)=246.629    E(BOND)=60611.360  E(ANGL)=123274.133 |
+ | E(VDW )=131239.862                                                          |
+ -------------------------------------------------------------------------------
+ ------------------------------ cycle=    50 -----------------------------------
+ | Etotal =314598.608 grad(E)=246.617    E(BOND)=60671.430  E(ANGL)=123241.280 |
+ | E(VDW )=130685.899                                                          |
+ -------------------------------------------------------------------------------
+ LBFGS: normal termination - NSTEP limit reached
+ DCART: temperature coupling (TCOUpling) enabled
+ -------------------------- Cartesian dynamics start ---------------------------
+ | E(kin)+E(total)=0.13E+07        E(kin)=1803.592      temperature=305.284    |
+ | Etotal =0.13E+07   grad(E)=643.241    E(BOND)=60671.430  E(ANGL)=123241.280 |
+ | E(IMPR)=0.11E+07                                                            |
+ -------------------------------------------------------------------------------
+ ----------------- final step=       50 at      0.02500 ps ---------------------
+ | E(kin)+E(total)=808837.053      E(kin)=189812.524    temperature=32128.492  |
+ | Etotal =619024.529 grad(E)=348.130    E(BOND)=79026.401  E(ANGL)=281111.100 |
+ | E(IMPR)=258887.028                                                          |
+ -------------------------------------------------------------------------------
+ CENMAS: Information about center of free masses
+         position [A]          :     -5.92994     32.28922     36.06914
+         velocity [A/ps]       :      0.37417      0.43642     -0.92337
+         ang. mom. [amu A/ps]  : -23408.206461230883.83561 -61132.02513
+         kin. ener. [Kcal/mol] :     56.04359
+ LBFGS: number of degrees of freedom=  5946
+ NBONDS: found   264706 intra-atom interactions
+ NBONDS: found   264252 intra-atom interactions
+ NBONDS: found   264412 intra-atom interactions
+ NBONDS: found   265010 intra-atom interactions
+ NBONDS: found   265318 intra-atom interactions
+ NBONDS: found   265420 intra-atom interactions
+ NBONDS: found   265322 intra-atom interactions
+ NBONDS: found   265364 intra-atom interactions
+ NBONDS: found   265350 intra-atom interactions
+ ------------------------------ cycle=    10 -----------------------------------
+ | Etotal =411433.544 grad(E)=128.401    E(BOND)=58878.661  E(ANGL)=54502.489  |
+ | E(IMPR)=193295.477 E(VDW )=104756.917                                       |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265358 intra-atom interactions
+ NBONDS: found   265327 intra-atom interactions
+ NBONDS: found   265374 intra-atom interactions
+ ------------------------------ cycle=    20 -----------------------------------
+ | Etotal =382759.116 grad(E)=114.032    E(BOND)=54957.953  E(ANGL)=43146.667  |
+ | E(IMPR)=181685.462 E(VDW )=102969.035                                       |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265368 intra-atom interactions
+ NBONDS: found   265355 intra-atom interactions
+ NBONDS: found   265413 intra-atom interactions
+ NBONDS: found   265409 intra-atom interactions
+ ------------------------------ cycle=    30 -----------------------------------
+ | Etotal =377017.591 grad(E)=110.653    E(BOND)=55068.320  E(ANGL)=41341.747  |
+ | E(IMPR)=179990.813 E(VDW )=100616.712                                       |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265375 intra-atom interactions
+ NBONDS: found   265389 intra-atom interactions
+ ------------------------------ cycle=    40 -----------------------------------
+ | Etotal =370334.789 grad(E)=107.153    E(BOND)=53870.597  E(ANGL)=38752.399  |
+ | E(IMPR)=176981.998 E(VDW )=100729.794                                       |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265326 intra-atom interactions
+ NBONDS: found   265340 intra-atom interactions
+ ------------------------------ cycle=    50 -----------------------------------
+ | Etotal =368765.732 grad(E)=104.040    E(BOND)=53855.956  E(ANGL)=38101.555  |
+ | E(IMPR)=176630.381 E(VDW )=100177.841                                       |
+ -------------------------------------------------------------------------------
+ LBFGS: normal termination - NSTEP limit reached
+ DCART: temperature coupling (TCOUpling) enabled
+ -------------------------- Cartesian dynamics start ---------------------------
+ | E(kin)+E(total)=370591.160      E(kin)=1825.428      temperature=308.980    |
+ | Etotal =368765.732 grad(E)=104.040    E(BOND)=53855.956  E(ANGL)=38101.555  |
+ | E(IMPR)=176630.381 E(VDW )=100177.841                                       |
+ -------------------------------------------------------------------------------
+ NBONDS: found   265379 intra-atom interactions
+ NBONDS: found   265334 intra-atom interactions
+ ----------------- final step=       50 at      0.02500 ps ---------------------
+ | E(kin)+E(total)=371159.521      E(kin)=2128.225      temperature=360.233    |
+ | Etotal =369031.296 grad(E)=108.369    E(BOND)=54300.196  E(ANGL)=38114.363  |
+ | E(IMPR)=176013.953 E(VDW )=100602.783                                       |
+ -------------------------------------------------------------------------------
+ CENMAS: Information about center of free masses
+         position [A]          :     -5.92515     32.28704     36.06860
+         velocity [A/ps]       :     -0.07698     -0.25615     -0.02345
+         ang. mom. [amu A/ps]  : -27238.79317 -80242.15126 -82044.37047
+         kin. ener. [Kcal/mol] :      3.41492
+ %PARRDR-info: duplication of bond HC   NC2 
+ %PARRDR-info: duplication of bond OUF  SUF 
+ %PARRDR-info: duplication of angle CH2P CH2E HA  
+ %PARRDR-info: duplication of angle OUF  SUF  OUF 
+ %PARRDR-info: duplication of nonbonded entry H   
+ %PARRDR-info: duplication of nonbonded entry HA  
+ %PARRDR-info: duplication of nonbonded entry HC  
+ %PARRDR-info: duplication of nonbonded entry SUF 
+ %PARRDR-info: duplication of nonbonded entry OUF 
+ LBFGS: number of degrees of freedom=  5946
+ NBONDS: generating intra-molecular exclusion list with mode=-3
+ MAKINB: mode  -3 found   6486 exclusions and      0 interactions(1-4)
+ NBONDS: found   260869 intra-atom interactions
+ NBONDS: found   261555 intra-atom interactions
+ NBONDS: found   261538 intra-atom interactions
+ NBONDS: found   261450 intra-atom interactions
+ NBONDS: found   261588 intra-atom interactions
+ NBONDS: found   261457 intra-atom interactions
+ NBONDS: found   261662 intra-atom interactions
+ NBONDS: found   261548 intra-atom interactions
+ NBONDS: found   261619 intra-atom interactions
+ NBONDS: found   261697 intra-atom interactions
+ NBONDS: found   261895 intra-atom interactions
+ NBONDS: found   261809 intra-atom interactions
+ NBONDS: found   261888 intra-atom interactions
+ NBONDS: found   261751 intra-atom interactions
+ NBONDS: found   261598 intra-atom interactions
+ NBONDS: found   261573 intra-atom interactions
+ NBONDS: found   261575 intra-atom interactions
+ NBONDS: found   261544 intra-atom interactions
+ ------------------------------ cycle=    25 -----------------------------------
+ | Etotal =21552.385  grad(E)=36.607     E(BOND)=1110.565   E(ANGL)=8835.222   |
+ | E(IMPR)=11531.066  E(VDW )=75.532                                           |
+ -------------------------------------------------------------------------------
+ NBONDS: found   261612 intra-atom interactions
+ NBONDS: found   261647 intra-atom interactions
+ NBONDS: found   261664 intra-atom interactions
+ NBONDS: found   261658 intra-atom interactions
+ NBONDS: found   261683 intra-atom interactions
+ NBONDS: found   261707 intra-atom interactions
+ ------------------------------ cycle=    50 -----------------------------------
+ | Etotal =3923.898   grad(E)=18.631     E(BOND)=172.608    E(ANGL)=1970.970   |
+ | E(IMPR)=1724.025   E(VDW )=56.295                                           |
+ -------------------------------------------------------------------------------
+ NBONDS: found   261727 intra-atom interactions
+ NBONDS: found   261701 intra-atom interactions
+ ------------------------------ cycle=    75 -----------------------------------
+ | Etotal =527.537    grad(E)=9.944      E(BOND)=2.943      E(ANGL)=446.297    |
+ | E(IMPR)=47.148     E(VDW )=31.149                                           |
+ -------------------------------------------------------------------------------
+ ------------------------------ cycle=   100 -----------------------------------
+ | Etotal =523.534    grad(E)=9.920      E(BOND)=2.723      E(ANGL)=446.091    |
+ | E(IMPR)=47.196     E(VDW )=27.524                                           |
+ -------------------------------------------------------------------------------
+ LBFGS: normal termination - NSTEP limit reached
+ DCART: temperature coupling (TCOUpling) enabled
+ -------------------------- Cartesian dynamics start ---------------------------
+ | E(kin)+E(total)=2328.462        E(kin)=1804.928      temperature=305.510    |
+ | Etotal =523.534    grad(E)=9.920      E(BOND)=2.723      E(ANGL)=446.091    |
+ | E(IMPR)=47.196     E(VDW )=27.524                                           |
+ -------------------------------------------------------------------------------
+ NBONDS: found   261726 intra-atom interactions
+ NBONDS: found   261651 intra-atom interactions
+ NBONDS: found   261496 intra-atom interactions
+ NBONDS: found   261513 intra-atom interactions
+ NBONDS: found   261468 intra-atom interactions
+ ----------------- final step=      500 at      0.25000 ps ---------------------
+ | E(kin)+E(total)=3744.858        E(kin)=1871.800      temperature=316.829    |
+ | Etotal =1873.058   grad(E)=31.677     E(BOND)=279.065    E(ANGL)=1267.942   |
+ | E(IMPR)=261.448    E(VDW )=64.604                                           |
+ -------------------------------------------------------------------------------
+ CENMAS: Information about center of free masses
+         position [A]          :     -5.92951     32.28473     36.06599
+         velocity [A/ps]       :     -0.04574     -0.07968      0.06129
+         ang. mom. [amu A/ps]  :  27074.17472  12841.85313 -62454.34478
+         kin. ener. [Kcal/mol] :      0.57780
+ EFLAGS: the following energy flags are set
+ EFLAGS: BOND ANGL DIHE IMPR VDW 
+ %PARRDR-info: duplication of bond HC   NC2 
+ %PARRDR-info: duplication of bond OUF  SUF 
+ %PARRDR-info: duplication of angle CH2P CH2E HA  
+ %PARRDR-info: duplication of angle OUF  SUF  OUF 
+ %PARRDR-info: duplication of nonbonded entry H   
+ %PARRDR-info: duplication of nonbonded entry HA  
+ %PARRDR-info: duplication of nonbonded entry HC  
+ %PARRDR-info: duplication of nonbonded entry SUF 
+ %PARRDR-info: duplication of nonbonded entry OUF 
+ LBFGS: number of degrees of freedom=  5946
+ NBONDS: generating intra-molecular exclusion list with mode=-3
+ MAKINB: mode  -3 found   6486 exclusions and      0 interactions(1-4)
+ NBONDS: found   261468 intra-atom interactions
+ NBONDS: found   261340 intra-atom interactions
+ ------------------------------ cycle=    50 -----------------------------------
+ | Etotal =3416.982   grad(E)=15.236     E(BOND)=51.060     E(ANGL)=647.018    |
+ | E(DIHE)=47.616     E(IMPR)=59.720     E(VDW )=2611.567                      |
+ -------------------------------------------------------------------------------
+ NBONDS: found   261357 intra-atom interactions
+ ------------------------------ cycle=   100 -----------------------------------
+ | Etotal =3368.517   grad(E)=15.248     E(BOND)=51.110     E(ANGL)=645.467    |
+ | E(DIHE)=35.592     E(IMPR)=58.467     E(VDW )=2577.880                      |
+ -------------------------------------------------------------------------------
+ ------------------------------ cycle=   150 -----------------------------------
+ | Etotal =3367.430   grad(E)=15.253     E(BOND)=51.131     E(ANGL)=645.446    |
+ | E(DIHE)=33.899     E(IMPR)=58.491     E(VDW )=2578.462                      |
+ -------------------------------------------------------------------------------
+ NBONDS: found   261377 intra-atom interactions
+ ------------------------------ cycle=   200 -----------------------------------
+ | Etotal =3364.921   grad(E)=15.250     E(BOND)=51.154     E(ANGL)=645.313    |
+ | E(DIHE)=32.955     E(IMPR)=58.470     E(VDW )=2577.031                      |
+ -------------------------------------------------------------------------------
+ LBFGS: normal termination - gradient converged
+ DCART: temperature coupling (TCOUpling) enabled
+ -------------------------- Cartesian dynamics start ---------------------------
+ | E(kin)+E(total)=5151.241        E(kin)=1786.323      temperature=302.361    |
+ | Etotal =3364.918   grad(E)=15.250     E(BOND)=51.156     E(ANGL)=645.311    |
+ | E(DIHE)=32.937     E(IMPR)=58.472     E(VDW )=2577.042                      |
+ -------------------------------------------------------------------------------
+ NBONDS: found   261370 intra-atom interactions
+ NBONDS: found   261337 intra-atom interactions
+ NBONDS: found   261281 intra-atom interactions
+ NBONDS: found   261268 intra-atom interactions
+ NBONDS: found   261454 intra-atom interactions
+ NBONDS: found   261460 intra-atom interactions
+ NBONDS: found   261501 intra-atom interactions
+ NBONDS: found   261526 intra-atom interactions
+ NBONDS: found   261535 intra-atom interactions
+ NBONDS: found   261602 intra-atom interactions
+ NBONDS: found   261627 intra-atom interactions
+ NBONDS: found   261595 intra-atom interactions
+ NBONDS: found   261462 intra-atom interactions
+ NBONDS: found   261414 intra-atom interactions
+ NBONDS: found   261297 intra-atom interactions
+ NBONDS: found   261281 intra-atom interactions
+ NBONDS: found   261247 intra-atom interactions
+ NBONDS: found   261182 intra-atom interactions
+ ----------------- final step=      500 at      0.25000 ps ---------------------
+ | E(kin)+E(total)=6836.957        E(kin)=1742.587      temperature=294.958    |
+ | Etotal =5094.369   grad(E)=36.877     E(BOND)=474.942    E(ANGL)=1604.778   |
+ | E(DIHE)=38.815     E(IMPR)=293.123    E(VDW )=2682.711                      |
+ -------------------------------------------------------------------------------
+ CENMAS: Information about center of free masses
+         position [A]          :     -5.92848     32.28288     36.06429
+         velocity [A/ps]       :      0.25721     -0.39914     -0.17112
+         ang. mom. [amu A/ps]  :  -7963.86769  -3546.40211   8074.07006
+         kin. ener. [Kcal/mol] :      0.60823
+ LBFGS: number of degrees of freedom=  5946
+ ------------------------------ cycle=    50 -----------------------------------
+ | Etotal =3367.997   grad(E)=15.258     E(BOND)=51.303     E(ANGL)=646.275    |
+ | E(DIHE)=32.257     E(IMPR)=58.635     E(VDW )=2579.527                      |
+ -------------------------------------------------------------------------------
+ ------------------------------ cycle=   100 -----------------------------------
+ | Etotal =3366.885   grad(E)=15.248     E(BOND)=51.270     E(ANGL)=645.682    |
+ | E(DIHE)=32.753     E(IMPR)=58.557     E(VDW )=2578.623                      |
+ -------------------------------------------------------------------------------
+ LBFGS: normal termination - gradient converged
+ (atom-i        |atom-j        )    dist.   equil.   delta    energy   const. 
+
+ (A    25   CB  |A    25   HB1 )    1.060    1.080   -0.020    0.418 1000.000
+ (A    51   CA  |A    51   HA  )    1.060    1.080   -0.020    0.409 1000.000
+ (A    102  CB  |A    102  HB1 )    1.059    1.080   -0.021    0.444 1000.000
+ (A    121  CB  |A    121  HB1 )    1.058    1.080   -0.022    0.488 1000.000
+ (A    188  CB  |A    188  HB2 )    1.057    1.080   -0.023    0.528 1000.000
+ (A    214  CB  |A    214  HB1 )    1.054    1.080   -0.026    0.662 1000.000
+ (A    280  CG  |A    280  HG  )    1.109    1.080    0.029    0.834 1000.000
+ Number of violations greater    0.020:     7
+ RMS deviation=   0.005
+ (atom-i        |atom-j        |atom-k        )  angle    equil.     delta    energy  const. 
+
+ (A    111  CA  |A    111  CB  |A    111  HB2 )  104.139  109.283   -5.144    4.031  500.000
+ (A    280  CB  |A    280  CG  |A    280  HG  )   94.686  109.249  -14.562   32.298  500.000
+ (A    280  HG  |A    280  CG  |A    280  CD1 )   95.009  108.128  -13.119   26.213  500.000
+ (A    280  HG  |A    280  CG  |A    280  CD2 )   97.507  108.128  -10.621   17.181  500.000
+ Number of violations greater    5.000:     4
+ RMS deviation=   0.970
+          ============================================================
+           Maximum dynamic memory allocation:    13229368 bytes
+           Maximum dynamic memory overhead:          1872 bytes
+           Program started at: 18:06:47 on 22-May-2017
+           Program stopped at: 18:07:04 on 22-May-2017
+           CPU time used:      15.5103 seconds
+          ============================================================

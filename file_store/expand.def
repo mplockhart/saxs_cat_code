@@ -16,7 +16,7 @@ noe
         
   { FRET pairs near Ro }
           assign ( resid chain_1 and segid A and name CA )
-                 ( resid chain_2 and segid B and name CA ) 500 4.9 4.9
+                 ( resid chain_2 and segid B and name CA ) 300 4.9 4.9
           	
 
  end           

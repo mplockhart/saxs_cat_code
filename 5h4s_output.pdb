@@ -1,6 +1,6 @@
-REMARK FILENAME="output_generate_easy.pdb"
+REMARK FILENAME="5h4s_output.pdb"
 REMARK coordinates built for more than 100 hundred atoms
-REMARK DATE:22-May-2017  17:30:41       created by user: michaellockhart
+REMARK DATE:22-May-2017  18:07:04       created by user: michaellockhart
 REMARK VERSION:1.3
 ATOM      1  HA  ALA A   1     -17.185  38.652  22.969  1.00 20.83      A    H  
 ATOM      2  CB  ALA A   1     -15.689  38.022  24.388  1.00 19.44      A    C  
