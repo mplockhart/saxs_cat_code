@@ -52,7 +52,7 @@
 {=========================== coordinate file ==============================}
 
 {* coordinate file *}
-{===>} coordinate_infile="5h4s_atoms.pdb";
+{===>} coordinate_infile="5ao5_atoms.pdb";
 
 {* convert chainid to segid if chainid is non-blank *}
 {+ choice: true false +}
@@ -164,10 +164,10 @@
 {============================= output files ================================}
 
 {* output structure file *}
-{===>} structure_outfile="5h4s_output.mtf";
+{===>} structure_outfile="5ao5_output.mtf";
 
 {* output coordinate file *}
-{===>} coordinate_outfile="5h4s_output.pdb";
+{===>} coordinate_outfile="5ao5_output.pdb";
 
 {===========================================================================}
 {         things below this line do not need to be changed                  }
@@ -495,7 +495,7 @@
 {=========================== coordinate file ==============================}
 
 {* coordinate file *}
-{===>} coordinate_infile="5h4s_atoms.pdb";
+{===>} coordinate_infile="5ao5_atoms.pdb";
 
 {* convert chainid to segid if chainid is non-blank *}
 {+ choice: true false +}
@@ -607,10 +607,10 @@
 {============================= output files ================================}
 
 {* output structure file *}
-{===>} structure_outfile="5h4s_output.mtf";
+{===>} structure_outfile="5ao5_output.mtf";
 
 {* output coordinate file *}
-{===>} coordinate_outfile="5h4s_output.pdb";
+{===>} coordinate_outfile="5ao5_output.pdb";
 
 {===========================================================================}
 {         things below this line do not need to be changed                  }
@@ -938,7 +938,7 @@
 {=========================== coordinate file ==============================}
 
 {* coordinate file *}
-{===>} coordinate_infile="5h4s_atoms.pdb";
+{===>} coordinate_infile="5ao5_atoms.pdb";
 
 {* convert chainid to segid if chainid is non-blank *}
 {+ choice: true false +}
@@ -1050,10 +1050,10 @@
 {============================= output files ================================}
 
 {* output structure file *}
-{===>} structure_outfile="5h4s_output.mtf";
+{===>} structure_outfile="5ao5_output.mtf";
 
 {* output coordinate file *}
-{===>} coordinate_outfile="5h4s_output.pdb";
+{===>} coordinate_outfile="5ao5_output.pdb";
 
 {===========================================================================}
 {         things below this line do not need to be changed                  }

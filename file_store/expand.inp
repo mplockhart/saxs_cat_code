@@ -121,7 +121,11 @@
 
 {* atom selections for non-default rigid groups during torsion angle dynamics *}
 {* note: the selections must be non-overlapping *}
-{===>} atom_rigid_1=();
+{===>} atom_rigid_1=(none);
+{===>} atom_rigid_2=(none);
+{===>} atom_rigid_3=(none);
+{===>} atom_rigid_4=(none);
+{===>} atom_rigid_5=(none);
 
 ! to add more groups add more numbered entries:
 !   {===>} atom_rigid_11=(none);

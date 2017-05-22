@@ -9,7 +9,7 @@ comments
 
 
 # all methods
-def self.extract_atoms
+def extract_atoms
   @pdb_file = @pdb_base_name
   @pdb_file = @pdb_file.chomp + '.pdb'
   @atoms_only = File.new("#{@pdb_file.chomp('.pdb')}_atoms.pdb", 'w')
@@ -40,7 +40,7 @@ def cns_run_generate
   system('cns < generate_easy.inp > generate.log')
 end
 
-def cns_expand_file
+def cns_expand_file(domain_1_start, domain_1_end, domain_2_start, domain_2_end)
   # Open and fill out the expand.inp file
   system('cp file_store/expand.inp .')
   expand_file = File.read("expand.inp")
@@ -48,16 +48,21 @@ def cns_expand_file
   sub_mtf_input = expand_file.gsub!(/{===>} structure_infile="";/, "{===>} structure_infile=\"#{@pdb_base_name}_output.mtf\";")
   sub_restraint = expand_file.gsub!(/{===>} restraints_infile="";/, " {===>} restraints_infile=\"expand.def\"; ")
   sub_trajectory_output = expand_file.gsub!(/{===>} output_root="model_anneal";/, "{===>} output_root=\"#{@pdb_base_name}_model_expand.pdb\";")
+  sub_domain_1 = expand_file.gsub!(/{===>} atom_rigid_1=(none);/, "{===>} atom_rigid_1=(segid A and resid #{domain_1_start}:#{domain_1_end});")
+  sub_domain_2 = expand_file.gsub!(/{===>} atom_rigid_2=(none);/, "{===>} atom_rigid_2=(segid A and resid #{domain_2_start}:#{domain_2_end});")
   random = rand(10000..99999)
   sub_random_number = expand_file.gsub!(/{===>} seed=82364;/, "{===>} seed=#{random};")
+
   @expand = File.open('expand.inp', 'w')
   @expand.puts sub_pdb_input
   @expand.puts sub_mtf_input
   @expand.puts sub_restraint
   @expand.puts sub_trajectory_output
+  @expand.puts sub_domain_1
+  @expand.puts sub_domain_2
 
   system('cp file_store/expand.def .')
-  expand_def = File.read("expand.def")
+  expand_def = File.read('expand.def')
 ####################################################################
   sub_def_chain_1 = expand_def.gsub!(/resid chain_1/, 'resid 100') # this may require changing if there are not
   sub_def_chain_2 = expand_def.gsub!(/resid chain_2/, 'resid 100') # any residues with a resid of 100
@@ -214,16 +219,16 @@ This is for the parameters that will be required in CNS
 
 cns_parameters
 
-@pdb_base_name = '5h4s' # don't include '.pdb'
+@pdb_base_name = '5ao5' # don't include '.pdb'
 
 extract_atoms
 cns_generate_file
 cns_run_generate
-cns_expand_file
+cns_expand_file(40, 163, 190,511)
 # need to assign th rigid bodies in the style:
 # {===>} atom_rigid_1=(segid A and resid 140:262);
 # etc
-cns_run_expand
+#cns_run_expand
 
 <<comments
 input data file

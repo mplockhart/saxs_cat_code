@@ -20,7 +20,7 @@
 {============================ coordinates ============================}
 
 {* coordinate file *}
-{===>} coordinate_infile="5h4s_output.pdb";
+{===>} coordinate_infile="5ao5_output.pdb";
 
 {==================== molecular information ==========================}
 
@@ -68,7 +68,7 @@
    Alternatively, the generate.inp or generate_easy.inp task files
    can be used to generated the mtf prior to running this task file.
     *}
-{===>} structure_infile="5h4s_output.mtf";
+{===>} structure_infile="5ao5_output.mtf";
 
 {* for auto generation: extra linkages and modifications by custom patches *}
 {===>} patch_infile="";
@@ -121,7 +121,11 @@
 
 {* atom selections for non-default rigid groups during torsion angle dynamics *}
 {* note: the selections must be non-overlapping *}
-{===>} atom_rigid_1=(none);
+{===>} atom_rigid_1=(segid A and resid 40:163);
+{===>} atom_rigid_2=(segid A and resid 190:510);
+{===>} atom_rigid_3=(none);
+{===>} atom_rigid_4=(none);
+{===>} atom_rigid_5=(none);
 
 ! to add more groups add more numbered entries:
 !   {===>} atom_rigid_11=(none);
@@ -190,11 +194,11 @@
 {* frequency of writing trajectory (in steps) *}
 {* this only applies to the constant temperature option *}
 {* a trajectory will not be written if this value is 0 or less *}
-{===>} traj_freq=0;
+{===>} traj_freq=1000;
 
 {* seed for random number generator *}
 {* change to get different initial velocities *}
-{===>} seed=59539;
+{===>} seed=12504;
 
 {* torsion angle topology modification file *}
 {===>} torsion_infile="CNS_TOPPAR:torsionmdmods";
@@ -210,7 +214,7 @@
              and a combined coordinate file (for display with VMD) with all 
              these coordinates appended will be in <output_root>_<n>_traj.pdb
              where <n> is the trial number and <m> is the trajectory frame number. +}
-{===>} output_root="5h4s_model_expand.pdb";
+{===>} output_root="5ao5_model_expand.pdb";
 
 {===========================================================================}
 {         things below this line do not normally need to be changed         }
@@ -774,7 +778,7 @@
 {============================ coordinates ============================}
 
 {* coordinate file *}
-{===>} coordinate_infile="5h4s_output.pdb";
+{===>} coordinate_infile="5ao5_output.pdb";
 
 {==================== molecular information ==========================}
 
@@ -822,7 +826,7 @@
    Alternatively, the generate.inp or generate_easy.inp task files
    can be used to generated the mtf prior to running this task file.
     *}
-{===>} structure_infile="5h4s_output.mtf";
+{===>} structure_infile="5ao5_output.mtf";
 
 {* for auto generation: extra linkages and modifications by custom patches *}
 {===>} patch_infile="";
@@ -876,6 +880,10 @@
 {* atom selections for non-default rigid groups during torsion angle dynamics *}
 {* note: the selections must be non-overlapping *}
 {===>} atom_rigid_1=(none);
+{===>} atom_rigid_2=(none);
+{===>} atom_rigid_3=(none);
+{===>} atom_rigid_4=(none);
+{===>} atom_rigid_5=(none);
 
 ! to add more groups add more numbered entries:
 !   {===>} atom_rigid_11=(none);
@@ -944,11 +952,11 @@
 {* frequency of writing trajectory (in steps) *}
 {* this only applies to the constant temperature option *}
 {* a trajectory will not be written if this value is 0 or less *}
-{===>} traj_freq=0;
+{===>} traj_freq=1000;
 
 {* seed for random number generator *}
 {* change to get different initial velocities *}
-{===>} seed=59539;
+{===>} seed=12504;
 
 {* torsion angle topology modification file *}
 {===>} torsion_infile="CNS_TOPPAR:torsionmdmods";
@@ -964,7 +972,7 @@
              and a combined coordinate file (for display with VMD) with all 
              these coordinates appended will be in <output_root>_<n>_traj.pdb
              where <n> is the trial number and <m> is the trajectory frame number. +}
-{===>} output_root="5h4s_model_expand.pdb";
+{===>} output_root="5ao5_model_expand.pdb";
 
 {===========================================================================}
 {         things below this line do not normally need to be changed         }
@@ -1528,7 +1536,7 @@
 {============================ coordinates ============================}
 
 {* coordinate file *}
-{===>} coordinate_infile="5h4s_output.pdb";
+{===>} coordinate_infile="5ao5_output.pdb";
 
 {==================== molecular information ==========================}
 
@@ -1576,7 +1584,7 @@
    Alternatively, the generate.inp or generate_easy.inp task files
    can be used to generated the mtf prior to running this task file.
     *}
-{===>} structure_infile="5h4s_output.mtf";
+{===>} structure_infile="5ao5_output.mtf";
 
 {* for auto generation: extra linkages and modifications by custom patches *}
 {===>} patch_infile="";
@@ -1630,6 +1638,10 @@
 {* atom selections for non-default rigid groups during torsion angle dynamics *}
 {* note: the selections must be non-overlapping *}
 {===>} atom_rigid_1=(none);
+{===>} atom_rigid_2=(none);
+{===>} atom_rigid_3=(none);
+{===>} atom_rigid_4=(none);
+{===>} atom_rigid_5=(none);
 
 ! to add more groups add more numbered entries:
 !   {===>} atom_rigid_11=(none);
@@ -1698,11 +1710,11 @@
 {* frequency of writing trajectory (in steps) *}
 {* this only applies to the constant temperature option *}
 {* a trajectory will not be written if this value is 0 or less *}
-{===>} traj_freq=0;
+{===>} traj_freq=1000;
 
 {* seed for random number generator *}
 {* change to get different initial velocities *}
-{===>} seed=59539;
+{===>} seed=12504;
 
 {* torsion angle topology modification file *}
 {===>} torsion_infile="CNS_TOPPAR:torsionmdmods";
@@ -1718,7 +1730,7 @@
              and a combined coordinate file (for display with VMD) with all 
              these coordinates appended will be in <output_root>_<n>_traj.pdb
              where <n> is the trial number and <m> is the trajectory frame number. +}
-{===>} output_root="5h4s_model_expand.pdb";
+{===>} output_root="5ao5_model_expand.pdb";
 
 {===========================================================================}
 {         things below this line do not normally need to be changed         }
@@ -2282,7 +2294,7 @@
 {============================ coordinates ============================}
 
 {* coordinate file *}
-{===>} coordinate_infile="5h4s_output.pdb";
+{===>} coordinate_infile="5ao5_output.pdb";
 
 {==================== molecular information ==========================}
 
@@ -2330,7 +2342,7 @@
    Alternatively, the generate.inp or generate_easy.inp task files
    can be used to generated the mtf prior to running this task file.
     *}
-{===>} structure_infile="5h4s_output.mtf";
+{===>} structure_infile="5ao5_output.mtf";
 
 {* for auto generation: extra linkages and modifications by custom patches *}
 {===>} patch_infile="";
@@ -2384,6 +2396,10 @@
 {* atom selections for non-default rigid groups during torsion angle dynamics *}
 {* note: the selections must be non-overlapping *}
 {===>} atom_rigid_1=(none);
+{===>} atom_rigid_2=(none);
+{===>} atom_rigid_3=(none);
+{===>} atom_rigid_4=(none);
+{===>} atom_rigid_5=(none);
 
 ! to add more groups add more numbered entries:
 !   {===>} atom_rigid_11=(none);
@@ -2452,11 +2468,11 @@
 {* frequency of writing trajectory (in steps) *}
 {* this only applies to the constant temperature option *}
 {* a trajectory will not be written if this value is 0 or less *}
-{===>} traj_freq=0;
+{===>} traj_freq=1000;
 
 {* seed for random number generator *}
 {* change to get different initial velocities *}
-{===>} seed=59539;
+{===>} seed=12504;
 
 {* torsion angle topology modification file *}
 {===>} torsion_infile="CNS_TOPPAR:torsionmdmods";
@@ -2472,7 +2488,7 @@
              and a combined coordinate file (for display with VMD) with all 
              these coordinates appended will be in <output_root>_<n>_traj.pdb
              where <n> is the trial number and <m> is the trajectory frame number. +}
-{===>} output_root="5h4s_model_expand.pdb";
+{===>} output_root="5ao5_model_expand.pdb";
 
 {===========================================================================}
 {         things below this line do not normally need to be changed         }
@@ -3014,3 +3030,5 @@
  end loop main
  
  stop
+
+
