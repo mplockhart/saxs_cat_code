@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
+
 <<comments
 This is the bare bones, fully manual copy of the program. This is finished for the thesis with no user inputs.
 start date: 12/05/17
@@ -7,6 +9,69 @@ comments
 
 
 # all methods
+def self.extract_atoms
+  @pdb_file = @pdb_base_name
+  @pdb_file = @pdb_file.chomp + '.pdb'
+  @atoms_only = File.new("#{@pdb_file.chomp('.pdb')}_atoms.pdb", 'w')
+  File.open(@pdb_file, 'r') do |file|
+    file.each_line do |line|
+      if line.match(/^ATOM/) || line.match(/^TER/) || line.match(/^END/)
+        @atoms_only.puts line
+      end
+    end
+  end
+  @atoms_only.close
+end
+
+def cns_generate_file
+  # Open and fill out the generate.inp file
+  system('cp file_store/generate_easy.inp .')
+  generate_file = File.read("generate_easy.inp")
+  sub_pdb_input = generate_file.gsub!(/{===>} coordinate_infile="input_rename_here.pdb";/, "{===>} coordinate_infile=\"#{@pdb_base_name}_atoms.pdb;")
+  @sub_pdb_output = generate_file.gsub!(/{===>} structure_outfile="output_generate_easy.mtf";/, "{===>} structure_outfile=\"#{@pdb_base_name}_output.mtf;")
+  @sub_mtf_output = generate_file.gsub!(/{===>} coordinate_outfile="output_generate_easy.pdb";/, "{===>} coordinate_outfile=\"#{@pdb_base_name}_output.pdb;")
+  generate_easy = File.open("generate_easy.inp", 'w')
+  generate_easy.puts sub_pdb_input
+  generate_easy.puts @sub_pdb_output
+  generate_easy.puts @sub_mtf_output
+end
+
+def cns_run_generate
+  system('cns < generate_easy.inp > generate.log')
+end
+
+def cns_expand_file
+  # Open and fill out the expand.inp file
+  system('cp file_store/expand.inp .')
+  expand_file = File.read("expand.inp")
+  sub_pdb_input = expand_file.gsub!(/{===>} coordinate_infile="amy_hydrogen.pdb";/, "{===>} coordinate_infile=\"#{@pdb_base_name}_output.pdb;")
+  sub_mtf_input = expand_file.gsub!(/{===>} structure_infile="";/, "{===>} structure_infile=\"#{@pdb_base_name}_output.mtf;")
+  sub_restraint = expand_file.gsub!(/{===>} restraints_infile="";/, " {===>} restraints_infile=\"expand.def\"; ")
+  sub_trajectory_output = expand_file.gsub!(/{===>} output_root="model_anneal";/, "{===>} output_root=\"#{@pdb_base_name}_model_expand.pdb;")
+  random = rand(10000..99999)
+  sub_random_number = expand_file.gsub!(/{===>} seed=82364;/, "{===>} seed=#{random};")
+  @expand = File.open('expand.inp', 'w')
+  @expand.puts sub_pdb_input
+  @expand.puts sub_mtf_input
+  @expand.puts sub_restraint
+  @expand.puts sub_trajectory_output
+
+  system('cp file_store/expand.def .')
+  expand_def = File.read("expand.def")
+##################################################################
+  sub_def_chain_1 = expand_def.gsub!(/resid chain_1/, 'resid 100')
+  sub_def_chain_2 = expand_def.gsub!(/resid chain_2/, 'resid 100')
+##################################################################
+  @expand_def = File.open('expand.def', 'w')
+  @expand_def.puts sub_def_chain_1
+  @expand_def.puts sub_def_chain_2
+end
+
+
+def cns_run_expand
+  system('cns < expand.inp > expand.log')
+end
+
 def bins_3
   bin_1 = 0
 
@@ -145,6 +210,22 @@ def shannon_values
   #
 end
 
+<<cns_parameters
+This is for the parameters that will be required in CNS
+
+cns_parameters
+
+@pdb_base_name = '5h4s' # don't include '.pdb'
+
+extract_atoms
+cns_generate_file
+cns_run_generate
+#cns_expand_file
+# need to assign th rigid bodies in the style:
+# {===>} atom_rigid_1=(segid A and resid 140:262);
+# etc
+#cns_run_expand
+
 <<comments
 input data file
 scatter_file = File.open('file.file', 'w+')
@@ -166,7 +247,7 @@ the number is 3, 4, or 5. 5 should be fine enough sampling in order to achieve a
 comment
 
 ####################
-shannon_bins = 5 #
+shannon_bins = 1 #
 ####################
 
 <<shannon
@@ -181,7 +262,6 @@ until index == (shannon_bins-1)
   bin_center_array.push(bin_centers)
   index += 1
 end
-
 
 # here the name of the files need to be put between the parenthesis
 if shannon_bins == 3

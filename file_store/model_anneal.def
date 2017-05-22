@@ -1,0 +1,30 @@
+{* FRET distance information *}
+
+noe
+   nres=5000
+   class inter
+   ceiling=1000
+   averaging inter cent
+   potential inter square
+   sqconstant inter 1.
+   sqexponent inter 2
+   scale inter 150.
+
+ { remarks: rigid body modeling }
+ 
+ { assign <selection> <selection> distance dminus dplus }
+        
+  { FRET pairs near Ro }
+          assign ( resid atom_1 and segid chain_a and name CA )
+                 ( resid atom_2 and segid chain_b and name CA ) dist_1 half_1 half_2
+          assign ( resid atom_3 and segid chain_c and name CA )
+                 ( resid atom_4 and segid chain_d and name CA ) dist_2 half_1 half_2
+          assign ( resid atom_5 and segid chain_e and name CA )
+                 ( resid atom_6 and segid chain_f and name CA ) dist_3 half_1 half_2
+          assign ( resid atom_7 and segid chain_g and name CA )
+                 ( resid atom_8 and segid chain_h and name CA ) dist_4 half_1 half_2
+
+
+ end           
+ 
+ flags include NOE end 
